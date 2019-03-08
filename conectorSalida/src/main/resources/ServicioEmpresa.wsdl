@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://clienteFinalSOAP/empresas" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://clienteFinalSOAP/empresas" targetNamespace="http://clienteFinalSOAP/empresas">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://clienteFinalSOAP/empresas">
+  
+  <xs:element name="buscarPorRazonSocialRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="razonSocial" type="xs:string"/>
+      </xs:sequence>  
+    </xs:complexType>
+  </xs:element>
+    
+  <xs:element name="buscarPorRazonSocialResponse">
+    <xs:complexType>
+      <xs:sequence>
+      <xs:element name="codigoRespuesta" type="xs:int"/>
+      <xs:element name="mensajeRespuesta" type="xs:string"/>
+        <xs:element name="Empresa" type="tns:Empresa"/>
+      </xs:sequence>  
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:complexType name="Empresa">
+    <xs:sequence>
+      <xs:element name="razonSocial" type="xs:string"/>
+      <xs:element name="nombre" type="xs:string"/>
+      <xs:element name="rut" type="xs:string"/>
+      <xs:element name="localidad" type="xs:string"/>
+      <xs:element name="direccion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="buscarPorRazonSocialRequest">
+    <wsdl:part element="tns:buscarPorRazonSocialRequest" name="buscarPorRazonSocialRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="buscarPorRazonSocialResponse">
+    <wsdl:part element="tns:buscarPorRazonSocialResponse" name="buscarPorRazonSocialResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="EmpresaPort">
+    <wsdl:operation name="buscarPorRazonSocial">
+      <wsdl:input message="tns:buscarPorRazonSocialRequest" name="buscarPorRazonSocialRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:buscarPorRazonSocialResponse" name="buscarPorRazonSocialResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="EmpresaPortSoap11" type="tns:EmpresaPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="buscarPorRazonSocial">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="buscarPorRazonSocialRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="buscarPorRazonSocialResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EmpresaPortService">
+    <wsdl:port binding="tns:EmpresaPortSoap11" name="EmpresaPortSoap11">
+      <soap:address location="http://localhost:9002/ws"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

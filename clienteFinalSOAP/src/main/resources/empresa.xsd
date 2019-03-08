@@ -1,0 +1,33 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+targetNamespace="http://clienteFinalSOAP/empresas" 
+xmlns:tns="http://clienteFinalSOAP/empresas" elementFormDefault="qualified">
+  
+  <xs:element name="buscarPorRazonSocialRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name= "razonSocial" type="xs:string"/>
+      </xs:sequence>  
+    </xs:complexType>
+  </xs:element>
+    
+  <xs:element name="buscarPorRazonSocialResponse">
+    <xs:complexType>
+      <xs:sequence>
+      <xs:element name= "codigoRespuesta" type="xs:int"/>
+      <xs:element name= "mensajeRespuesta" type="xs:string"/>
+        <xs:element name= "Empresa" type="tns:Empresa"/>
+      </xs:sequence>  
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:complexType name="Empresa">
+    <xs:sequence>
+      <xs:element name="razonSocial" type="xs:string"/>
+      <xs:element name="nombre" type="xs:string"/>
+      <xs:element name="rut" type="xs:string"/>
+      <xs:element name="localidad" type="xs:string"/>
+      <xs:element name="direccion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+</xs:schema>
