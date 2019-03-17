@@ -23,7 +23,7 @@ public class EnriquecedorLogica implements IEnriquecedorLogica {
 	public Message<String> enriquecerMensaje(Message<String> message){
 		logger.info("Mensaje recibido en el Enriquecedor: "+message.toString());
 		MessageHeaders headers = message.getHeaders();
-		String idSol = (String) headers.get("idSol");
+		String idSol = (String) headers.get("idsol");
 		Integer paso = (Integer) headers.get("paso");
 		StringBuffer enricherUser = new StringBuffer("enricher.");
 		enricherUser.append(idSol).append(".paso").append(paso).append(".usuario");

@@ -33,32 +33,27 @@ public class ConectorLogica implements IConectorLogica{
 	
 	public Message<String> procesamientoConector(Message<String> message) throws Exception{
 		int numero = (int) (Math.random() * 100);
-		logger.info("EJECUTANDO CONECTOR2!! El numero aleatorio es:"+numero);
+		logger.info("EJECUTANDO CONECTORSALIDA!! El numero aleatorio es:"+numero);
 		MessageHeaders headers = message.getHeaders();
-		String idSol = (String) headers.get("idSol");
+		String idSol = (String) headers.get("idsol");
 		Integer paso = (Integer) headers.get("paso");
-		StringBuffer tipoComSolPrpty = new StringBuffer("solucion.").append(idSol).append(".tipoComunicacion");
-		String tipoComunicacionSol = env.getProperty(tipoComSolPrpty.toString());
 		if (numero > 80) {
-			logger.error("El conector2 dio error!!");
+			logger.error("El CONECTORSALIDA dio error!!");
 			throw new Exception("Error por número aleatorio!!");
 		}
-		logger.info("Llego el siguiente mensaje al Conector2: "+ message.getPayload().toString());
-		logger.info("Solucion ejecutada en Conector2: "+ idSol);
-		logger.info("Paso de solucion ejecutada en Conector2: "+ paso);
-		if ("req-resp".equals(tipoComunicacionSol)) {
-			StringBuffer elementParam1Prpty = new StringBuffer("conectorSalida.").append(idSol).append(".requestParam1");
-			String elementParam1 = env.getProperty(elementParam1Prpty.toString());
-			String param1 = servicioParametrosRequestSOAP.obtenerUnParametro(elementParam1, message.getPayload());
-			StringBuffer clienteWSDLPrpty = new StringBuffer("conectorSalida.").append(idSol).append(".clienteWSDL");
-	        String clienteWSDL = env.getProperty(clienteWSDLPrpty.toString());
-			String wsdlResponse = llamadaClienteSOAP(clienteWSDL, param1);
-			logger.info("Respuesta de cliente final: "+ wsdlResponse);
-			Message<String> messageResultado = (Message<String>) MessageBuilder.withPayload(wsdlResponse).copyHeaders(message.getHeaders()).build();
-			return messageResultado;
-		}else {
-			return message;
-		}
+		logger.info("Llego el siguiente mensaje al CONECTORSALIDA: "+ message.getPayload().toString());
+		logger.info("Solucion ejecutada en CONECTORSALIDA: "+ idSol);
+		logger.info("Paso de solucion ejecutada en CONECTORSALIDA: "+ paso);
+		StringBuffer elementParam1Prpty = new StringBuffer("conectorSalida.").append(idSol).append(".requestParam1");
+		String elementParam1 = env.getProperty(elementParam1Prpty.toString());
+		String param1 = servicioParametrosRequestSOAP.obtenerUnParametro(elementParam1, message.getPayload());
+		StringBuffer clienteWSDLPrpty = new StringBuffer("conectorSalida.").append(idSol).append(".clienteWSDL");
+        String clienteWSDL = env.getProperty(clienteWSDLPrpty.toString());
+		String wsdlResponse = llamadaClienteSOAP(clienteWSDL, param1);
+		logger.info("Respuesta de cliente final: "+ wsdlResponse);
+		Message<String> messageResultado = (Message<String>) MessageBuilder.withPayload(wsdlResponse).copyHeaders(message.getHeaders()).build();
+		return messageResultado;
+		
 	}
 	
 	private String llamadaClienteSOAP(String url, String param) throws Exception {

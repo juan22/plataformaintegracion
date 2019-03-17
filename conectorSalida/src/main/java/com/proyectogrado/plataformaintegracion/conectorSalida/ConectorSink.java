@@ -7,13 +7,13 @@ import org.springframework.messaging.SubscribableChannel;
 
 public interface ConectorSink {
 	
-	@Input("correctasChannel")
-	SubscribableChannel correctas();
+	@Input("conectorSalidaSubscribableChannel")
+	SubscribableChannel conectorSalidaSubscribable();
 	
-	@Output("respuestasChannel")
-	MessageChannel respuestas();
+	@Output("conectorSalidaMessagesChannel")
+	MessageChannel conectorSalidaMessages();
 	
-	@Output("conector2ReplyChannel")
-	MessageChannel conector2Reply();
+	@Output("conectorSalidaErrorsChannel")
+	MessageChannel conectorSalidaErrors();
 
 }

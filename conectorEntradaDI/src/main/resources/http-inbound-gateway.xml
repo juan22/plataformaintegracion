@@ -37,7 +37,7 @@
 <!-- 	agregamos los headers paso, idMensaje y tipoComposicion
 		ademas el metodo captureReplyChannel obtiene el replyChannel anonimo asignado al request y se almacena en un HashMap	 -->
 	<int:header-enricher input-channel="inputChannel" output-channel="routerChannel">      
-        	<int:header name="paso" value="1" />
+        	<int:header name="paso" value="1" type="java.lang.Integer" />
         	<int:header name="idMensaje" method="captureReplyChannel" ref="conectorController" />
         	<int:header name="tipoComposicion" method="setTipoComposicion" ref="conectorController" />
     </int:header-enricher>
@@ -53,7 +53,7 @@
 	<int-amqp:outbound-channel-adapter 
 		mapped-request-headers="idSol, paso, idMensaje, STANDARD_REQUEST_HEADERS" 
 		channel="coreografiaChannel"
-		exchange-name="conector1MessagesS1" >
+		exchange-name="conectorEntradaMessages" >
 	</int-amqp:outbound-channel-adapter>
 	
 <!-- 	se envia el mensaje al orquestador -->
@@ -75,7 +75,7 @@
 	<int-amqp:inbound-channel-adapter 
 		mapped-request-headers="idMensaje"
 		channel="inputBroker"
-		queue-names="conector1Queue" />
+		queue-names="conectorEntradaQueue" />
 	
 	
 	
@@ -93,15 +93,15 @@
 	<!-- configuracion de rabbit, exchanges, queues, and bindings -->
 	
 	<rabbit:topic-exchange 
-		name="conector1MessagesS1" 
+		name="conectorEntradaMessages" 
 		durable="true">
 	</rabbit:topic-exchange>
 	
-	<rabbit:queue name="conector1Queue" durable="true"  ></rabbit:queue>
+	<rabbit:queue name="conectorEntradaQueue" durable="true"  ></rabbit:queue>
 
-	<rabbit:topic-exchange name="transformacionMessagesFinalS1" >
+	<rabbit:topic-exchange name="replayMessages" >
 		<rabbit:bindings>
-			<rabbit:binding queue="conector1Queue" pattern="#"/>
+			<rabbit:binding queue="conectorEntradaQueue" pattern="#"/>
 		</rabbit:bindings>
 	</rabbit:topic-exchange>
 

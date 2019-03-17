@@ -8,11 +8,10 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.core.env.Environment;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageHeaders;
 
 
 @EnableBinding(ConectorSink.class)
-public class ConectorConsumer {
+public class ConectorBroker {
 	
 	@Autowired
 	Environment env;
@@ -26,29 +25,19 @@ public class ConectorConsumer {
 	@Autowired
 	IConectorLogica conectorLogica;
 		
-	private Logger logger = LoggerFactory.getLogger(ConectorConsumer.class);
+	private Logger logger = LoggerFactory.getLogger(ConectorBroker.class);
 
-	@StreamListener(target = "correctasChannel")
+	@StreamListener(target = "conectorSalidaSubscribableChannel")
 	public void receive(Message<String> message){
 		try {
-			Message<String> mensaje = conectorLogica.procesamientoConector(message);
-				
-			MessageHeaders headers = message.getHeaders();
-			String idSol = (String) headers.get("idSol");
-			StringBuffer tipoComSolPrpty = new StringBuffer("solucion.").append(idSol).append(".tipoComunicacion");
-			String tipoComunicacionSol = env.getProperty(tipoComSolPrpty.toString());
-			
-			if ("req-resp".equals(tipoComunicacionSol)) {
-				conectorSink.conector2Reply().send(mensaje);
-			}else {
-				conectorSink.respuestas().send(message);
-			}
-			logger.info("Se ejecutó CONECTOR2 exitosamente");
+			Message<String> mensaje = conectorLogica.procesamientoConector(message);					
+			conectorSink.conectorSalidaMessages().send(mensaje);
+			logger.info("Se ejecutó CONECTORSALIDA exitosamente");
 		}catch(Exception ex) {
-			logger.error("ERROR EN CONECTOR2:"+ex.getMessage());
+			logger.error("ERROR EN CONECTORSALIDA:"+ex.getMessage());
 			String msjError = "Error de procesamiento! Consulte al administrador de la plataforma.";
 			Message<String> messageResultado = (Message<String>) MessageBuilder.withPayload(msjError).copyHeaders(message.getHeaders()).build();
-			conectorSink.respuestas().send(messageResultado);
+			conectorSink.conectorSalidaErrors().send(messageResultado);
 		}
 	}
 	

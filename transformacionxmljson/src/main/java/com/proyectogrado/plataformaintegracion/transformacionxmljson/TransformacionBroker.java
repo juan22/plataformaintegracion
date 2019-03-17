@@ -8,12 +8,10 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.core.env.Environment;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageHeaders;
-
 
 
 @EnableBinding(TransformacionProcesador.class)
-public class TransformacionProcessor<T> {
+public class TransformacionBroker {
 		
 	@Autowired
 	ITransformacionLogica transformacionLogica;
@@ -24,7 +22,7 @@ public class TransformacionProcessor<T> {
 	@Autowired
 	TransformacionProcesador transformacionProcesador;
 	
-	private Logger logger = LoggerFactory.getLogger(TransformacionProcessor.class);
+	private Logger logger = LoggerFactory.getLogger(TransformacionBroker.class);
 		
 	@StreamListener(target = "transformacionSubscribableChannel")
 	public void receive(Message<String> message) {
@@ -37,7 +35,7 @@ public class TransformacionProcessor<T> {
 			logger.error("ERROR EN TRANSFORMADOR: "+ex.getMessage());
 			String msjError = "Error de procesamiento! Consulte al administrador de la plataforma.";
 			Message<String> messageResultado = (Message<String>) MessageBuilder.withPayload(msjError).copyHeaders(message.getHeaders()).build();
-			transformacionProcesador.transformacionMessagesErrores().send(messageResultado);
+			transformacionProcesador.transformacionMessages().send(messageResultado);
 		}
 	}
 	
