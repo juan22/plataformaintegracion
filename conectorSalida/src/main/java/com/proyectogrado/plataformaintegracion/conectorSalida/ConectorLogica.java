@@ -3,6 +3,7 @@ package com.proyectogrado.plataformaintegracion.conectorSalida;
 import java.io.ByteArrayOutputStream;
 
 import javax.xml.soap.MessageFactory;
+import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPConnection;
 import javax.xml.soap.SOAPConnectionFactory;
@@ -37,6 +38,7 @@ public class ConectorLogica implements IConectorLogica{
 		MessageHeaders headers = message.getHeaders();
 		String idSol = (String) headers.get("idsol");
 		Integer paso = (Integer) headers.get("paso");
+		String authorization = (String) headers.get("Authorization");
 		if (numero > 80) {
 			logger.error("El CONECTORSALIDA dio error!!");
 			throw new Exception("Error por número aleatorio!!");
@@ -49,21 +51,21 @@ public class ConectorLogica implements IConectorLogica{
 		String param1 = servicioParametrosRequestSOAP.obtenerUnParametro(elementParam1, message.getPayload());
 		StringBuffer clienteWSDLPrpty = new StringBuffer("conectorSalida.").append(idSol).append(".clienteWSDL");
         String clienteWSDL = env.getProperty(clienteWSDLPrpty.toString());
-		String wsdlResponse = llamadaClienteSOAP(clienteWSDL, param1);
+		String wsdlResponse = llamadaClienteSOAP(clienteWSDL, param1, authorization);
 		logger.info("Respuesta de cliente final: "+ wsdlResponse);
 		Message<String> messageResultado = (Message<String>) MessageBuilder.withPayload(wsdlResponse).copyHeaders(message.getHeaders()).build();
 		return messageResultado;
 		
 	}
 	
-	private String llamadaClienteSOAP(String url, String param) throws Exception {
+	private String llamadaClienteSOAP(String url, String param, String authorization) throws Exception {
 		 try{
 	          // Create SOAP Connection
 	         SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
 	         SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 	
 	         //Send SOAP Message to SOAP Server
-	         SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(param), url);
+	         SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(param, authorization), url);
 	         
 	         // Process the SOAP Response
 	         String resultadoXML = getContentXML(soapResponse);
@@ -76,7 +78,7 @@ public class ConectorLogica implements IConectorLogica{
         }
 	}
 
-	private SOAPMessage createSOAPRequest(String param) throws Exception {
+	private SOAPMessage createSOAPRequest(String param, String authorization) throws Exception {
 		MessageFactory messageFactory = MessageFactory.newInstance();
        SOAPMessage soapMessage = messageFactory.createMessage();
        SOAPPart soapPart = soapMessage.getSOAPPart();
@@ -90,6 +92,9 @@ public class ConectorLogica implements IConectorLogica{
        SOAPElement soapBodyElem = soapBody.addChildElement("buscarPorRazonSocialRequest", "emp");
        SOAPElement soapBodyElem1 = soapBodyElem.addChildElement("razonSocial", "emp");
        soapBodyElem1.addTextNode(param);
+       
+       MimeHeaders hd = soapMessage.getMimeHeaders();
+       hd.addHeader("Authorization", authorization);
 
        soapMessage.saveChanges();
 

@@ -28,7 +28,7 @@ public class ConectorController {
 	public String ejecutarTrans(@RequestBody String contentMessage, @RequestHeader String idSol, @RequestHeader String paso){
 		Message<String> messageResultado;
 		Map<String,String> headers = new HashMap<>();
-		Message<String> message = MessageBuilder.withPayload(contentMessage).setHeader("idSol", idSol).setHeader("paso", new Integer(paso)).build();
+		Message<String> message = MessageBuilder.withPayload(contentMessage).setHeader("idsol", idSol).setHeader("paso", new Integer(paso)).build();
 		try {
 			messageResultado = conectorLogica.procesamientoConector(message);
 			logger.info("Se ejecutó CONECTOR2 exitosamente");
