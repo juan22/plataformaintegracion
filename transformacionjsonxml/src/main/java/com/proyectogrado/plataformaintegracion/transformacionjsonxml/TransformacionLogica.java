@@ -36,7 +36,8 @@ public class TransformacionLogica implements ITransformacionLogica {
 		logger.info("Mensaje recibido en el Transformador: "+message.toString());
 		MessageHeaders headers = message.getHeaders();
 		String idSol = (String) headers.get("idsol");
-		Integer paso = (Integer) headers.get("paso");
+		String pasoStr = (String) headers.get("paso");
+		Integer paso = new Integer(pasoStr);
 		int numero = (int) (Math.random() * 100);
 		logger.info("VAMOS A TRANSFORMAR!! El numero aleatorio es:"+numero);
 		Message<String> messageResultado;

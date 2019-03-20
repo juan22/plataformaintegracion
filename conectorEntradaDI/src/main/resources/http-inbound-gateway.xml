@@ -37,7 +37,7 @@
 <!-- 	agregamos los headers paso, idMensaje y tipoComposicion
 		ademas el metodo captureReplyChannel obtiene el replyChannel anonimo asignado al request y se almacena en un HashMap	 -->
 	<int:header-enricher input-channel="inputChannel" output-channel="routerChannel">      
-        	<int:header name="paso" value="1" type="java.lang.Integer" />
+        	<int:header name="paso" value="1"/>
         	<int:header name="idMensaje" method="captureReplyChannel" ref="conectorController" />
         	<int:header name="tipoComposicion" method="setTipoComposicion" ref="conectorController" />
     </int:header-enricher>

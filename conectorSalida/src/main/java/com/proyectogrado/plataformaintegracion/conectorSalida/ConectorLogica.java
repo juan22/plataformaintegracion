@@ -37,8 +37,9 @@ public class ConectorLogica implements IConectorLogica{
 		logger.info("EJECUTANDO CONECTORSALIDA!! El numero aleatorio es:"+numero);
 		MessageHeaders headers = message.getHeaders();
 		String idSol = (String) headers.get("idsol");
-		Integer paso = (Integer) headers.get("paso");
-		String authorization = (String) headers.get("Authorization");
+		String pasoStr = (String) headers.get("paso");
+		Integer paso = new Integer(pasoStr);
+		String authorization = (String) headers.get("authorization");
 		if (numero > 80) {
 			logger.error("El CONECTORSALIDA dio error!!");
 			throw new Exception("Error por número aleatorio!!");

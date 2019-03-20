@@ -1,6 +1,5 @@
 package com.proyectogrado.plataformaintegracion.transformacionjsonxml;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,11 +22,15 @@ public class TransformacionController {
 		
 	private Logger logger = LoggerFactory.getLogger(TransformacionController.class);
 		
+	
 	@RequestMapping(value = "/ejecutar", method = RequestMethod.POST)
-	public String ejecutarTrans(@RequestBody String contentMessage, @RequestHeader String idSol, @RequestHeader String paso){
+	public String ejecutarTrans(@RequestBody String mensaje){
 		Message<String> messageResultado;
-		Map<String,String> headers = new HashMap<>();
-		Message<String> message = MessageBuilder.withPayload(contentMessage).setHeader("idSol", idSol).setHeader("paso", new Integer(paso)).build();
+		
+		Map<String,String> headers = MensajeCanonicoUtils.obtenerListaHeadersMensajeCanonico(mensaje);
+		String contenidoMensaje = MensajeCanonicoUtils.obtenerPayloadMensajeCanonico(mensaje);
+		
+		Message<String> message = crearMensajeSpring(headers, contenidoMensaje);
 		try {
 			messageResultado = transformacionLogica.procesamientoTransformacion(message);
 			logger.info("Se ejecutó TRANSFORMADOR exitosamente");
@@ -41,5 +43,14 @@ public class TransformacionController {
 		}
 		return MensajeCanonicoUtils.crearMensajeCanonico(headers, messageResultado.getPayload());
 	}
-
+	
+	
+	private Message<String> crearMensajeSpring(Map<String,String> headers, String contenidoMensaje){
+		MessageBuilder<String> builder = MessageBuilder.withPayload(contenidoMensaje);
+		for(Map.Entry<String, String> header : headers.entrySet()){
+			builder = builder.setHeader(header.getKey(), header.getValue());
+		}
+		return builder.build();
+	}
+	
 }

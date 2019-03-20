@@ -1,5 +1,6 @@
 package utils;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONObject;
@@ -23,6 +24,17 @@ public interface MensajeCanonicoUtils {
 		JSONObject headersObj = jsonObj.getJSONObject("headers");
 		return headersObj.getString(header);
 
+	}
+	
+	public static Map<String,String> obtenerListaHeadersMensajeCanonico(String mensaje){
+		Map<String,String> resultado = new HashMap<>();
+		JSONObject jsonObj = new JSONObject(mensaje);
+		JSONObject headersObj = jsonObj.getJSONObject("headers");
+		for (String key : JSONObject.getNames(headersObj)) {
+			String value = headersObj.getString(key);
+			resultado.put(key, value);
+		}
+		return resultado;
 	}
 	
 	public static String obtenerPayloadMensajeCanonico(String mensaje) {

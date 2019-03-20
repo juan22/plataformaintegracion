@@ -25,10 +25,14 @@ public class ConectorController {
 	private Logger logger = LoggerFactory.getLogger(ConectorController.class);
 	
 	@RequestMapping(value = "/ejecutar", method = RequestMethod.POST)
-	public String ejecutarTrans(@RequestBody String contentMessage, @RequestHeader String idSol, @RequestHeader String paso){
+	public String ejecutarTrans(@RequestBody String mensaje){
 		Message<String> messageResultado;
-		Map<String,String> headers = new HashMap<>();
-		Message<String> message = MessageBuilder.withPayload(contentMessage).setHeader("idsol", idSol).setHeader("paso", new Integer(paso)).build();
+		
+		Map<String,String> headers = MensajeCanonicoUtils.obtenerListaHeadersMensajeCanonico(mensaje);
+		String contenidoMensaje = MensajeCanonicoUtils.obtenerPayloadMensajeCanonico(mensaje);
+		
+		Message<String> message = crearMensajeSpring(headers, contenidoMensaje);
+		
 		try {
 			messageResultado = conectorLogica.procesamientoConector(message);
 			logger.info("Se ejecutó CONECTOR2 exitosamente");
@@ -40,6 +44,14 @@ public class ConectorController {
 			headers.put("status", "550");
 		}
 		return MensajeCanonicoUtils.crearMensajeCanonico(headers, messageResultado.getPayload());
+	}
+	
+	private Message<String> crearMensajeSpring(Map<String,String> headers, String contenidoMensaje){
+		MessageBuilder<String> builder = MessageBuilder.withPayload(contenidoMensaje);
+		for(Map.Entry<String, String> header : headers.entrySet()){
+			builder = builder.setHeader(header.getKey(), header.getValue());
+		}
+		return builder.build();
 	}
 
 }

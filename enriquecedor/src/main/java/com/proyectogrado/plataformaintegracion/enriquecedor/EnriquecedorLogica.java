@@ -24,7 +24,8 @@ public class EnriquecedorLogica implements IEnriquecedorLogica {
 		logger.info("Mensaje recibido en el Enriquecedor: "+message.toString());
 		MessageHeaders headers = message.getHeaders();
 		String idSol = (String) headers.get("idsol");
-		Integer paso = (Integer) headers.get("paso");
+		String pasoStr = (String) headers.get("paso");
+		Integer paso = new Integer(pasoStr);
 		StringBuffer enricherUser = new StringBuffer("enricher.");
 		enricherUser.append(idSol).append(".paso").append(paso).append(".usuario");
     	String enricherUsuario = env.getProperty(enricherUser.toString());
@@ -34,7 +35,7 @@ public class EnriquecedorLogica implements IEnriquecedorLogica {
 		String basicAuth = obtenerCadenaBasicAuth(enricherUsuario, enricherContrasenia);
 		logger.info("Resultado de Enriquecedor: "+basicAuth);
         paso = paso + 1;
-        Message<String> messageResultado = (Message<String>) MessageBuilder.withPayload(message.getPayload()).copyHeaders(message.getHeaders()).setHeader("paso", paso).setHeader("Authorization", basicAuth).build();
+        Message<String> messageResultado = (Message<String>) MessageBuilder.withPayload(message.getPayload()).copyHeaders(message.getHeaders()).setHeader("paso", paso.toString()).setHeader("authorization", basicAuth).build();
         return messageResultado;
 	}
 
