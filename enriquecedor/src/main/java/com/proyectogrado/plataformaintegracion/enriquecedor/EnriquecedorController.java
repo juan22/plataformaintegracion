@@ -37,9 +37,6 @@ public class EnriquecedorController {
 			logger.info("Se ejecutó ENRIQUECEDOR exitosamente");
 			headers = obtenerHeadersMensajeSpring(messageResultado);
 			headers.put("status", "200");
-//			MessageHeaders headersMessageResult = messageResultado.getHeaders();
-//			String basicAuth = (String) headersMessageResult.get("authorization");
-//			headers.put("authorization", basicAuth);
 		} catch (Exception ex) {
 			logger.error("ERROR EN ENRIQUECEDOR: "+ex.getMessage());
 			String msjError = "Error de procesamiento! Consulte al administrador de la plataforma.";

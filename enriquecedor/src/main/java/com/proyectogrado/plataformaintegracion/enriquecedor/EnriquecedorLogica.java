@@ -24,18 +24,15 @@ public class EnriquecedorLogica implements IEnriquecedorLogica {
 		logger.info("Mensaje recibido en el Enriquecedor: "+message.toString());
 		MessageHeaders headers = message.getHeaders();
 		String idSol = (String) headers.get("idsol");
-		String pasoStr = (String) headers.get("paso");
-		Integer paso = new Integer(pasoStr);
 		StringBuffer enricherUser = new StringBuffer("enricher.");
-		enricherUser.append(idSol).append(".paso").append(paso).append(".usuario");
+		enricherUser.append(idSol).append(".usuario");
     	String enricherUsuario = env.getProperty(enricherUser.toString());
     	StringBuffer enricherPass = new StringBuffer("enricher.");
-    	enricherPass.append(idSol).append(".paso").append(paso).append(".password");
+    	enricherPass.append(idSol).append(".password");
     	String enricherContrasenia = env.getProperty(enricherPass.toString());
 		String basicAuth = obtenerCadenaBasicAuth(enricherUsuario, enricherContrasenia);
 		logger.info("Resultado de Enriquecedor: "+basicAuth);
-        paso = paso + 1;
-        Message<String> messageResultado = (Message<String>) MessageBuilder.withPayload(message.getPayload()).copyHeaders(message.getHeaders()).setHeader("paso", paso.toString()).setHeader("authorization", basicAuth).build();
+        Message<String> messageResultado = (Message<String>) MessageBuilder.withPayload(message.getPayload()).copyHeaders(message.getHeaders()).setHeader("authorization", basicAuth).build();
         return messageResultado;
 	}
 

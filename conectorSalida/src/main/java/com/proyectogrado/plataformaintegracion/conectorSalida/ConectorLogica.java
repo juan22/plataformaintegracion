@@ -37,8 +37,6 @@ public class ConectorLogica implements IConectorLogica{
 		logger.info("EJECUTANDO CONECTORSALIDA!! El numero aleatorio es:"+numero);
 		MessageHeaders headers = message.getHeaders();
 		String idSol = (String) headers.get("idsol");
-		String pasoStr = (String) headers.get("paso");
-		Integer paso = new Integer(pasoStr);
 		String authorization = (String) headers.get("authorization");
 		if (numero > 80) {
 			logger.error("El CONECTORSALIDA dio error!!");
@@ -46,7 +44,6 @@ public class ConectorLogica implements IConectorLogica{
 		}
 		logger.info("Llego el siguiente mensaje al CONECTORSALIDA: "+ message.getPayload().toString());
 		logger.info("Solucion ejecutada en CONECTORSALIDA: "+ idSol);
-		logger.info("Paso de solucion ejecutada en CONECTORSALIDA: "+ paso);
 		StringBuffer elementParam1Prpty = new StringBuffer("conectorSalida.").append(idSol).append(".requestParam1");
 		String elementParam1 = env.getProperty(elementParam1Prpty.toString());
 		String param1 = servicioParametrosRequestSOAP.obtenerUnParametro(elementParam1, message.getPayload());
