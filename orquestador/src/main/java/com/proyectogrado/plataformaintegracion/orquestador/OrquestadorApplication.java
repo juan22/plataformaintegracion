@@ -5,12 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-//@ComponentScan(useDefaultFilters = false) // Disable component scanner
 public class OrquestadorApplication {
 
 	public static void main(String[] args) {
@@ -24,15 +22,5 @@ public class OrquestadorApplication {
 		return new RestTemplate();
 	}
 	
-	/*@Bean
-	public ClientOrquestadorService orquestadorService() {
-		return new ClientOrquestadorService("http://TRANSFORMACION1");
-	}
-	
-	@Bean
-	public OrquestadorController orquestadorController() {
-		return new OrquestadorController(orquestadorService());
-	}*/
-
 }
 
