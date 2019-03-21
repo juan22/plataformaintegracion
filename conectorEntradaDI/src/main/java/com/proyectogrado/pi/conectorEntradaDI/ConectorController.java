@@ -39,7 +39,6 @@ public class ConectorController {
         MessageHeaders headers = message.getHeaders();
         Object channel = headers.getReplyChannel();
         String correlationID = Utils.getRandomHexString(20);
-        logger.info("request correlationID: "+correlationID);
         logger.info("request: "+message.getPayload().toString());
         replyChannelMap.put(correlationID, channel);
         return correlationID;
