@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import utils.MensajeCanonicoUtils;
+import utils.MensajeSpringUtils;
 
 @RestController
 public class TransformacionController {
@@ -29,7 +30,7 @@ public class TransformacionController {
 		Map<String,String> headers = MensajeCanonicoUtils.obtenerListaHeadersMensajeCanonico(mensaje);
 		String contenidoMensaje = MensajeCanonicoUtils.obtenerPayloadMensajeCanonico(mensaje);
 		
-		Message<String> message = crearMensajeSpring(headers, contenidoMensaje);
+		Message<String> message = MensajeSpringUtils.crearMensajeSpring(headers, contenidoMensaje);
 		try {
 			messageResultado = transformacionLogica.procesamientoTransformacion(message);
 			logger.info("Se ejecutó TRANSFORMADOR exitosamente");
@@ -41,14 +42,6 @@ public class TransformacionController {
 			headers.put("status", "550");
 		}
 		return MensajeCanonicoUtils.crearMensajeCanonico(headers, messageResultado.getPayload());
-	}
-	
-	private Message<String> crearMensajeSpring(Map<String,String> headers, String contenidoMensaje){
-		MessageBuilder<String> builder = MessageBuilder.withPayload(contenidoMensaje);
-		for(Map.Entry<String, String> header : headers.entrySet()){
-			builder = builder.setHeader(header.getKey(), header.getValue());
-		}
-		return builder.build();
 	}
 
 }

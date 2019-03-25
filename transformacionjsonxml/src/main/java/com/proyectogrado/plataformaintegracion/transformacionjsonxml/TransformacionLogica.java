@@ -10,7 +10,6 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class TransformacionLogica implements ITransformacionLogica {
 	

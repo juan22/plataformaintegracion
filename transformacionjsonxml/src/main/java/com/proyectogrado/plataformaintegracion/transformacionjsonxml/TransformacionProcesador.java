@@ -9,10 +9,7 @@ public interface TransformacionProcesador {
 	
 	@Input("transformacionSubscribableChannel")
 	SubscribableChannel transformacionSubscribable();
-	
-//	@Input("transformacionReplySubscribableChannel")
-//	SubscribableChannel transformacionReplySubscribable();
-	
+		
 	@Output("transformacionMessagesChannel")
 	MessageChannel transformacionMessages();
 	
