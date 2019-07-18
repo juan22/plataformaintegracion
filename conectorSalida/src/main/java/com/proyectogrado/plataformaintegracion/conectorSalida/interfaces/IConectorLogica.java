@@ -1,4 +1,4 @@
-package com.proyectogrado.plataformaintegracion.conectorSalida;
+package com.proyectogrado.plataformaintegracion.conectorSalida.interfaces;
 
 import org.springframework.messaging.Message;
 

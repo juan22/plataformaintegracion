@@ -1,4 +1,4 @@
-package com.proyectogrado.plataformaintegracion.enriquecedor;
+package com.proyectogrado.plataformaintegracion.enriquecedor.interfaces;
 
 import org.springframework.messaging.Message;
 

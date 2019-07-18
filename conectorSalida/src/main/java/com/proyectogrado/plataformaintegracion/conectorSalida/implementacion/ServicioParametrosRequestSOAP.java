@@ -1,6 +1,8 @@
-package com.proyectogrado.plataformaintegracion.conectorSalida;
+package com.proyectogrado.plataformaintegracion.conectorSalida.implementacion;
 
 import org.springframework.stereotype.Service;
+
+import com.proyectogrado.plataformaintegracion.conectorSalida.interfaces.IServicioParametrosRequest;
 
 @Service
 public class ServicioParametrosRequestSOAP implements IServicioParametrosRequest {

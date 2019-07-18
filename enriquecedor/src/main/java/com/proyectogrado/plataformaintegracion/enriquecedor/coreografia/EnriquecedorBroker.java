@@ -1,4 +1,4 @@
-package com.proyectogrado.plataformaintegracion.enriquecedor;
+package com.proyectogrado.plataformaintegracion.enriquecedor.coreografia;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +8,8 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.core.env.Environment;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
+
+import com.proyectogrado.plataformaintegracion.enriquecedor.interfaces.IEnriquecedorLogica;
 
 
 @EnableBinding(EnriquecedorProcesador.class)

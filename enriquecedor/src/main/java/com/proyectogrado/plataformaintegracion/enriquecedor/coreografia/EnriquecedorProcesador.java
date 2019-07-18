@@ -1,4 +1,4 @@
-package com.proyectogrado.plataformaintegracion.enriquecedor;
+package com.proyectogrado.plataformaintegracion.enriquecedor.coreografia;
 
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.Output;

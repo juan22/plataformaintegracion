@@ -1,4 +1,4 @@
-package com.proyectogrado.plataformaintegracion.conectorSalida;
+package com.proyectogrado.plataformaintegracion.conectorSalida.coreografia;
 
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.Output;

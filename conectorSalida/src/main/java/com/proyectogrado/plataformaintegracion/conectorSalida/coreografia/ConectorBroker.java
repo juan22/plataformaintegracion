@@ -1,4 +1,4 @@
-package com.proyectogrado.plataformaintegracion.conectorSalida;
+package com.proyectogrado.plataformaintegracion.conectorSalida.coreografia;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +8,9 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.core.env.Environment;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
+
+import com.proyectogrado.plataformaintegracion.conectorSalida.implementacion.ServicioParametrosRequestSOAP;
+import com.proyectogrado.plataformaintegracion.conectorSalida.interfaces.IConectorLogica;
 
 
 @EnableBinding(ConectorSink.class)

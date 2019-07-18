@@ -1,4 +1,4 @@
-package com.proyectogrado.plataformaintegracion.enriquecedor;
+package com.proyectogrado.plataformaintegracion.enriquecedor.implementacion;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +8,8 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
+
+import com.proyectogrado.plataformaintegracion.enriquecedor.interfaces.IEnriquecedorLogica;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;

@@ -1,4 +1,4 @@
-package com.proyectogrado.plataformaintegracion.conectorSalida;
+package com.proyectogrado.plataformaintegracion.conectorSalida.implementacion;
 
 import java.io.ByteArrayOutputStream;
 
@@ -20,6 +20,9 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
+
+import com.proyectogrado.plataformaintegracion.conectorSalida.interfaces.IConectorLogica;
+import com.proyectogrado.plataformaintegracion.conectorSalida.interfaces.IServicioParametrosRequest;
 
 @Service
 public class ConectorLogica implements IConectorLogica{

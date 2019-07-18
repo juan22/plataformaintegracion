@@ -1,4 +1,4 @@
-package com.proyectogrado.plataformaintegracion.transformacionxmljson;
+package com.proyectogrado.plataformaintegracion.transformacionxmljson.coreografia;
 
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.Output;

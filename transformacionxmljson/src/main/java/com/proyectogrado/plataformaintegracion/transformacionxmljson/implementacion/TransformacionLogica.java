@@ -1,4 +1,4 @@
-package com.proyectogrado.plataformaintegracion.transformacionjsonxml;
+package com.proyectogrado.plataformaintegracion.transformacionxmljson.implementacion;
 
 import org.json.JSONObject;
 import org.json.XML;
@@ -9,6 +9,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
+
+import com.proyectogrado.plataformaintegracion.transformacionxmljson.interfaces.ITransformacionLogica;
 
 @Service
 public class TransformacionLogica implements ITransformacionLogica {
@@ -27,15 +29,15 @@ public class TransformacionLogica implements ITransformacionLogica {
 			logger.error("El transformador dio error!!");
 			throw new Exception("Error por número aleatorio!!");
 		}
-		String result = transformarJsonToXml(message.getPayload());
+		String result = transformarXmlToJson(message.getPayload());
 		logger.info("Resultado de Transformacion: "+result);
         messageResultado = (Message<String>) MessageBuilder.withPayload(result).copyHeaders(message.getHeaders()).build();
         return messageResultado;
 	}
 
-	private String transformarJsonToXml(String texto) throws Exception{
-		JSONObject json = new JSONObject(texto);
-		return XML.toString(json);
+	private String transformarXmlToJson(String texto) throws Exception{
+		JSONObject xmlJSONObj = XML.toJSONObject(texto);
+        return xmlJSONObj.toString(4);
     }
 	
 }
