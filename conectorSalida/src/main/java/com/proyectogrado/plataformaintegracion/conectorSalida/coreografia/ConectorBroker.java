@@ -1,5 +1,6 @@
 package com.proyectogrado.plataformaintegracion.conectorSalida.coreografia;
 
+import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,8 @@ public class ConectorBroker {
 	@StreamListener(target = "conectorSalidaSubscribableChannel")
 	public void receive(Message<String> message){
 		try {
+			String idMensaje = (String) message.getHeaders().get("idmensaje");
+	        MDC.put( "idmensaje", idMensaje);
 			Message<String> mensaje = conectorLogica.procesamientoConector(message);					
 			conectorSink.conectorSalidaMessages().send(mensaje);
 			logger.info("Se ejecutó CONECTORSALIDA exitosamente");
@@ -41,6 +44,8 @@ public class ConectorBroker {
 			String msjError = "Error de procesamiento! Consulte al administrador de la plataforma.";
 			Message<String> messageResultado = (Message<String>) MessageBuilder.withPayload(msjError).copyHeaders(message.getHeaders()).build();
 			conectorSink.conectorSalidaErrors().send(messageResultado);
+		}finally {
+			MDC.remove("idmensaje");
 		}
 	}
 	

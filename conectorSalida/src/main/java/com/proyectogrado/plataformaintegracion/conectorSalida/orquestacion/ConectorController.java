@@ -2,6 +2,7 @@ package com.proyectogrado.plataformaintegracion.conectorSalida.orquestacion;
 
 import java.util.Map;
 
+import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class ConectorController {
 		
 		Message<String> message = MensajeSpringUtils.crearMensajeSpring(headers, contenidoMensaje);
 		
+		String idMensaje = (String) message.getHeaders().get("idmensaje");
+        MDC.put( "idmensaje", idMensaje);
+		
 		try {
 			messageResultado = conectorLogica.procesamientoConector(message);
 			logger.info("Se ejecutó CONECTOR2 exitosamente");
@@ -44,6 +48,7 @@ public class ConectorController {
 			messageResultado = (Message<String>) MessageBuilder.withPayload(msjError).copyHeaders(message.getHeaders()).build();
 			headers.put("status", "550");
 		}
+		MDC.remove("idmensaje");
 		return MensajeCanonicoUtils.crearMensajeCanonico(headers, messageResultado.getPayload());
 	}
 	

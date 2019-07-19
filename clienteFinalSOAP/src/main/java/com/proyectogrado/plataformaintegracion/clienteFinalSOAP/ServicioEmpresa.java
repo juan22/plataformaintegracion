@@ -40,8 +40,8 @@ public class ServicioEmpresa {
 	private void inicializarEmpresas() {
 		if (empresas == null) {
 			empresas = new ArrayList<EmpresaDto>();
-			empresas.add(new EmpresaDto("Arcos Dorados", "McDonald’s", "12323332", "Montevideo", "18 de Julio y Ejido"));
-			empresas.add(new EmpresaDto("PepsiCo", "Pepsi", "23499484", "Montevideo", "Camino Juan Burghi 2645-Ruta1 y Cibils – Km. 10"));
+			empresas.add(new EmpresaDto("Arcos Dorados", "McDonalds", "12323332", "Montevideo", "18 de Julio y Ejido"));
+			empresas.add(new EmpresaDto("PepsiCo", "Pepsi", "23499484", "Montevideo", "Camino Juan Burghi 2645-Ruta1 y Cibils, Km. 10"));
 			empresas.add(new EmpresaDto("Mapfre Uruguay Seguros S.A.", "Mapfre Seguros", "23900442", "Montevideo", "Juncal 1385 Piso 1"));
 		}
 		

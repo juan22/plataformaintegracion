@@ -50,7 +50,7 @@
 <!-- 	se envia el mensaje al broker -->
 	<int:channel id="coreografiaChannel" datatype="java.lang.String"></int:channel>
 	<int-amqp:outbound-channel-adapter 
-		mapped-request-headers="idsol, idmensaje, STANDARD_REQUEST_HEADERS, X-*" 
+		mapped-request-headers="idsol, idcorrelacion, idmensaje, STANDARD_REQUEST_HEADERS, X-*" 
 		channel="coreografiaChannel"
 		exchange-name="conectorEntradaMessages" >
 	</int-amqp:outbound-channel-adapter>
@@ -72,7 +72,7 @@
 	
 <!-- 	se recibe mensaje del broker -->
 	<int-amqp:inbound-channel-adapter 
-		mapped-request-headers="idsol, idmensaje, idCorrelacion, STANDARD_REQUEST_HEADERS, X-*"
+		mapped-request-headers="idsol, idmensaje, idcorrelacion, STANDARD_REQUEST_HEADERS, X-*"
 		channel="inputBroker"
 		queue-names="conectorEntradaQueue" />
 	

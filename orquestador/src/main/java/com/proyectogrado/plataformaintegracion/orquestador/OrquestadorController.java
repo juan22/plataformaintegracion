@@ -3,6 +3,7 @@ package com.proyectogrado.plataformaintegracion.orquestador;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,14 +30,17 @@ public class OrquestadorController {
 		
 	@RequestMapping("/orquestador/ejecutarSolucion")
     @ResponseBody
-	public String ejecutarSolucion(@RequestBody String contenidoMensaje, @RequestHeader String idSol) throws Exception {
+	public String ejecutarSolucion(@RequestBody String contenidoMensaje, @RequestHeader String idsol,
+			@RequestHeader String idmensaje) throws Exception {
 		try {
+			MDC.put( "idmensaje", idmensaje);
 			StringBuffer itinerarioPrpty = new StringBuffer("solucion.");
-			itinerarioPrpty.append(idSol).append(".itinerario");
+			itinerarioPrpty.append(idsol).append(".itinerario");
 	        String itinerarioSolucion = env.getProperty(itinerarioPrpty.toString());
 	        String[] listaItinerario = itinerarioSolucion.split(",");
 	        Map<String,String> headers = new HashMap<>();
-	        headers.put("idsol", idSol);
+	        headers.put("idsol", idsol);
+	        headers.put("idmensaje", idmensaje);
 	        String mensajeCanonico = MensajeCanonicoUtils.crearMensajeCanonico(headers, contenidoMensaje);
 	        for (int i = 0; i< listaItinerario.length; i++) {
 	        	String nombreMicroservicio = listaItinerario[i];
@@ -63,7 +67,10 @@ public class OrquestadorController {
 		}catch(Exception ex) {
 			logger.error("ERROR EN ORQUESTADOR: "+ex.getMessage());
 			return "No se pudo ejecutar la operación. Vuelva a intentarlo más tarde.";
+		}finally {
+			MDC.remove("idmensaje");
 		}
+		
 	}
 
 }

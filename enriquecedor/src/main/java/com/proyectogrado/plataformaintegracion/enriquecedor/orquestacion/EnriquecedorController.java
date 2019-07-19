@@ -2,6 +2,7 @@ package com.proyectogrado.plataformaintegracion.enriquecedor.orquestacion;
 
 import java.util.Map;
 
+import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class EnriquecedorController {
 		
 		Message<String> message = MensajeSpringUtils.crearMensajeSpring(headers, contenidoMensaje);
 		
+		String idMensaje = (String) message.getHeaders().get("idmensaje");
+        MDC.put( "idmensaje", idMensaje);
+		
 		try {
 			messageResultado = enriquecedorLogica.enriquecerMensaje(message);
 			logger.info("Se ejecutó ENRIQUECEDOR exitosamente");
@@ -45,6 +49,7 @@ public class EnriquecedorController {
 			messageResultado = (Message<String>) MessageBuilder.withPayload(msjError).copyHeaders(message.getHeaders()).build();
 			headers.put("status", "550");
 		}
+		MDC.remove("idmensaje");
 		return MensajeCanonicoUtils.crearMensajeCanonico(headers, messageResultado.getPayload());
 	}
 	

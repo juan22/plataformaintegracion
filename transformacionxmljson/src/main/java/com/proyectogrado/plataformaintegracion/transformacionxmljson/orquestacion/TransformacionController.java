@@ -2,6 +2,7 @@ package com.proyectogrado.plataformaintegracion.transformacionxmljson.orquestaci
 
 import java.util.Map;
 
+import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class TransformacionController {
 		String contenidoMensaje = MensajeCanonicoUtils.obtenerPayloadMensajeCanonico(mensaje);
 		
 		Message<String> message = MensajeSpringUtils.crearMensajeSpring(headers, contenidoMensaje);
+		
+		String idMensaje = (String) message.getHeaders().get("idmensaje");
+        MDC.put( "idmensaje", idMensaje);
 		try {
 			messageResultado = transformacionLogica.procesamientoTransformacion(message);
 			logger.info("Se ejecutó TRANSFORMADOR exitosamente");
@@ -43,6 +47,7 @@ public class TransformacionController {
 			messageResultado = (Message<String>) MessageBuilder.withPayload(msjError).copyHeaders(message.getHeaders()).build();
 			headers.put("status", "550");
 		}
+		MDC.remove("idmensaje");
 		return MensajeCanonicoUtils.crearMensajeCanonico(headers, messageResultado.getPayload());
 	}
 

@@ -1,5 +1,6 @@
 package com.proyectogrado.plataformaintegracion.enriquecedor.coreografia;
 
+import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class EnriquecedorBroker {
 	@StreamListener(target = "enriquecedorSubscribableChannel")
 	public void receive(Message<String> message) {
 		try {
+			String idMensaje = (String) message.getHeaders().get("idmensaje");
+	        MDC.put( "idmensaje", idMensaje);
 			Message<String> messageResultado;
 			messageResultado = enriquecedorLogica.enriquecerMensaje(message);
 			enriquecedorProcesador.enriquecedorMessages().send(messageResultado);
@@ -38,6 +41,8 @@ public class EnriquecedorBroker {
 			String msjError = "Error de procesamiento! Consulte al administrador de la plataforma.";
 			Message<String> messageResultado = (Message<String>) MessageBuilder.withPayload(msjError).copyHeaders(message.getHeaders()).build();
 			enriquecedorProcesador.enriquecedorMessagesErrores().send(messageResultado);
+		}finally {
+			MDC.remove("idmensaje");
 		}
 	}
 
