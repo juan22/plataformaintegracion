@@ -61,6 +61,7 @@ public class ConectorController {
         logger.info("response correlationID: "+correlationID);
         logger.info("response: "+message.getPayload().toString());
         
+        MDC.remove( "idmensaje");
         Object channel = replyChannelMap.remove(id);
         return channel;
     }
