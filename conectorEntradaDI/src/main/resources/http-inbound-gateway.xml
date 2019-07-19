@@ -25,7 +25,7 @@
 		request-channel="inputChannel" 
 		reply-channel="outputChannel"
 		path="/recibirMensaje"
-		mapped-request-headers="idSol, HTTP_REQUEST_HEADERS" 
+		mapped-request-headers="idsol, idmensaje, HTTP_REQUEST_HEADERS" 
 		supported-methods="POST" 
 		reply-timeout="10000" >
  		 	<http:request-mapping consumes="text/plain" produces="text/plain" />			 
@@ -34,10 +34,10 @@
 	<int:channel id="outputChannel" ></int:channel>
 	<int:channel id="inputChannel"  datatype="java.lang.String"></int:channel>
 
-<!-- 	agregamos los headers idMensaje y tipoComposicion
+<!-- 	agregamos los headers idCorrelacion y tipoComposicion
 		ademas el metodo captureReplyChannel obtiene el replyChannel anonimo asignado al request y se almacena en un HashMap	 -->
 	<int:header-enricher input-channel="inputChannel" output-channel="routerChannel">      
-        	<int:header name="idMensaje" method="captureReplyChannel" ref="conectorController" />
+        	<int:header name="idcorrelacion" method="captureReplyChannel" ref="conectorController" />
         	<int:header name="tipoComposicion" method="setTipoComposicion" ref="conectorController" />
     </int:header-enricher>
 	
@@ -50,7 +50,7 @@
 <!-- 	se envia el mensaje al broker -->
 	<int:channel id="coreografiaChannel" datatype="java.lang.String"></int:channel>
 	<int-amqp:outbound-channel-adapter 
-		mapped-request-headers="idSol, idMensaje, STANDARD_REQUEST_HEADERS, X-*" 
+		mapped-request-headers="idsol, idmensaje, STANDARD_REQUEST_HEADERS, X-*" 
 		channel="coreografiaChannel"
 		exchange-name="conectorEntradaMessages" >
 	</int-amqp:outbound-channel-adapter>
@@ -72,7 +72,7 @@
 	
 <!-- 	se recibe mensaje del broker -->
 	<int-amqp:inbound-channel-adapter 
-		mapped-request-headers="idSol, idMensaje, STANDARD_REQUEST_HEADERS, X-*"
+		mapped-request-headers="idsol, idmensaje, idCorrelacion, STANDARD_REQUEST_HEADERS, X-*"
 		channel="inputBroker"
 		queue-names="conectorEntradaQueue" />
 	
@@ -80,7 +80,7 @@
 	
 	<int:channel id="inputBroker" ></int:channel>
 	  
-<!-- 	se setea el replyChannel de acuerdo al idMensaje y header almacenado anteriormente -->
+<!-- 	se setea el replyChannel de acuerdo al idCorrelacion y header almacenado anteriormente -->
 	<int:header-enricher input-channel="inputBroker" output-channel="outputChannel" >    
            	<int:reply-channel method="getReplyChannel" ref="conectorController" />
     </int:header-enricher>    
